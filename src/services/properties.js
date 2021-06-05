@@ -24,3 +24,27 @@ exports.getProperties = async (setLimit, setPage) => {
         next(error);
     }   
 };
+
+exports.registerNewProperty = async (property) => {
+    try {
+       const newProperty = await Property.create({
+            cep: property.cep,
+            number: property.number,
+            complement: property.complement,
+            price: property.price,
+            rooms: property.rooms
+        });
+        return newProperty;
+    } catch (error) {
+        next(error)
+    }
+    Property.create({
+        cep: property.cep,
+        number: property.number,
+        complement: property.complement,
+        price: property.price,
+        rooms: property.rooms
+    }).then((result) => {
+        response.status(Status.CREATED).send(result);
+    }).catch((error) => next(error));
+}

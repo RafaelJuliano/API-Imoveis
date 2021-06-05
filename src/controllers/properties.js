@@ -22,7 +22,7 @@ exports.getProperties = async (request, response, next) => {
     };
 
     const properties = await service.getProperties(limit, page);
-    
+
     if (properties && properties.length) {
         response.send(properties);
     } else {
@@ -31,22 +31,16 @@ exports.getProperties = async (request, response, next) => {
 };
 
 exports.registerNewProperty = async (request, response, next) => {
-    console.log("salvando")
-    const cep = request.body.cep;
-    const number = request.body.number;
-    const complement = request.body.complement;
-    const price = request.body.price;
-    const rooms = request.body.rooms;
-
-    Property.create({
-        cep: cep,
-        number: number,
-        complement: complement,
-        price: price,
-        rooms: rooms
-    }).then((result) => {
-        response.status(Status.CREATED).send(result);
-    }).catch((error) => next(error));
+    const property = {
+        cep: request.body.cep,
+        number: request.body.number,
+        complement: request.body.complement,
+        price: request.body.price,
+        rooms: request.body.rooms
+    };
+    
+    const newProperty = await service.registerNewProperty(property);
+    response.status(Status.CREATED).send(newProperty);
 }
 
 exports.updateProperty = (request, response, next) => {
