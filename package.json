@@ -1,0 +1,32 @@
+{
+  "name": "api-imoveis",
+  "version": "1.0.0",
+  "description": "Modelo de API Rest responsável por servir uma plataforma de gerenciamento de imóveis.",
+  "main": "./src/app.js",
+  "scripts": {
+    "start": "node -r dotenv/config ./src/app.js",
+    "dev": "nodemon -r dotenv/config ./src/app.js",
+    "test": "jest --env node"
+  },
+  "keywords": [
+    "API",
+    "REST",
+    "node.js",
+    "express",
+    "sequelize",
+    "mysql"
+  ],
+  "author": "Rafael Juliano Ferreira",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "bcrypt": "^5.0.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "http-status": "^1.5.0",
+    "jest": "^27.0.4",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.6.2"
+  }
+}
