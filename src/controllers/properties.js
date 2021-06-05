@@ -1,39 +1,33 @@
 const Property = require('../models/properties');
 const Status = require('http-status');
+const service = require('../services/properties');
 
 
-exports.getProperty = (request, response, next) => {
+exports.getProperty = async (request, response, next) => {
     const id = request.params.id;
-
-    Property.findByPk(id).then((property) => {
-        if (property) {
-            response.send(property);
-        } else {
-            response.status(Status.NOT_FOUND).send();
-        };
-    }).catch((error) => next(error))
+    const property = await service.getProperty(id);
+    if (property) {
+        response.send(property);
+    } else {
+        response.status(Status.NOT_FOUND).send();
+    };
 };
 
-exports.getProperties = async(request, response, next) => {
-    let limite = parseInt(request.query.limite || 0);
-    let pagina = parseInt(request.query.pagina || 0);
+exports.getProperties = async (request, response, next) => {
+    const limit = parseInt(request.query.limit || 0);
+    const page = parseInt(request.query.page || 0);
 
-    if (!Number.isInteger(limite) || !Number.isInteger(pagina)) {
+    if (!Number.isInteger(limit) || !Number.isInteger(page)) {
         response.status(Status.BAD_REQUEST).send();
     };
 
-    const ITENS_POR_PAGINA = 10;
-
-    limite = limite > ITENS_POR_PAGINA || limite <= 0 ? ITENS_POR_PAGINA : limite;
-    pagina = pagina <= 0 ? 0 : pagina * limite;
-
-    Property.findAll({ limit: limite, offset: pagina }).then((properties) => {
-        if (properties && properties.length) {
-            response.send(properties);
-        } else {
-            response.status(Status.NOT_FOUND).send();
-        };
-    }).catch((error) => next(error));
+    const properties = await service.getProperties(limit, page);
+    
+    if (properties && properties.length) {
+        response.send(properties);
+    } else {
+        response.status(Status.NOT_FOUND).send();
+    };    
 };
 
 exports.registerNewProperty = async (request, response, next) => {
