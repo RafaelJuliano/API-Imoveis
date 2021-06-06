@@ -10,13 +10,16 @@ const app = express();
 
 app.use(express.json());
 
+//Rotas da API.
 app.use('/api', propertyRoute);
 app.use('/api', userRoute);
 
+//Resposta padrão caso a rota não exista.
 app.use((request, response, next) => {
     response.status(status.NOT_FOUND).send()
 });
 
+//Tratamento de erros.
 app.use((error, request, response, next) => {
     if (error.name === "SequelizeUniqueConstraintError") {
         return response.status(status.CONFLICT).json({message: "E-mail or CPF already registered"});        
@@ -26,6 +29,7 @@ app.use((error, request, response, next) => {
     }
     response.status(status.INTERNAL_SERVER_ERROR).json({ message: error.message })
 });
+
 
 sequelize.sync({ force: true }).then(() => {
     const port = process.env.PORT || 3000;

@@ -56,7 +56,7 @@ exports.getProperties = async (request, response, next) => {
 
 /*
 Solicita a inclusão de um novo imóvel no banco de dados.
-@paran cep = Deve receber no formáto 000.000.000-00.
+@paran cep = Deve receber no formáto 00000-000.
 @paran number = Recebe inteiro com limite de 6 digitos.
 @paran complemente = (Opcional).
 @paran price = Recebe um decimal com limite de 10 digitos.
@@ -83,7 +83,7 @@ exports.registerNewProperty = async (request, response, next) => {
 /*
 Solicita a alteração de uma ou mais colunas de um imóvel.
 @paran id = Id do imóvel a ser requisitado via url.
-@paran cep = Deve receber no formáto 000.000.000-00.
+@paran cep = Deve receber no formáto 00000-000.
 @paran number = Recebe inteiro com limite de 6 digitos.
 @paran complemento = (Opcional).
 @paran price = Recebe um decimal com limite de 10 digitos.

@@ -1,59 +1,47 @@
-const User = require('../models/users');
 const Status = require('http-status');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const service = require('../services/users');
 
+/*
+USER CONTROLLER LAYER
+É responsável por tratar os dados das requisições, envia-los à cadama de serviço e responder ao cliente conforme o resultado retornado.
+*/
 
+/*
+Solicita o cadastro de um novo usuário
+@paran name = String com nome do usuário.
+@paran cpd = String com o CPF no formato 000.000.000-00.
+@paran email = String com e-mail valido.
+@paran pwd = String com senha.
+@return = ID do usuário criado.
+*/
 exports.registerNewUser = async (request, response, next) => {
-    const name = request.body.name;
-    const cpf = request.body.cpf;
-    const email = request.body.email;
-    const pwd = request.body.pwd;
-
-    bcrypt.hash(pwd, 10, (errBcrypt, hash) => {
-        if (errBcrypt) {
-            return next(errBcrypt);
+    try {
+        const newUser = {
+            name: request.body.name,
+            cpf: request.body.cpf,
+            email: request.body.email,
+            pwd: request.body.pwd
         }
-        User.create({
-            name: name,
-            cpf: cpf,
-            email: email,
-            pwd: hash
-        }).then((result) => {
-            const id = result.id;
-            response.status(Status.CREATED).send({ id: id });
-        }).catch((error) => next(error));
-    });
-}
+        const createdUserId = await service.registerNewUser(newUser);
+        response.status(Status.CREATED).send({ id: createdUserId });
+    } catch (error) {
+        next(error);
+    }
+};
 
 exports.login = async (request, response, next) => {
-    const email = request.body.email;
-    const pwd = request.body.pwd;
-    User.findOne({ where: { email: email } }).then((user) => {
-        if (user) {
-            bcrypt.compare(pwd, user.pwd, (errBcrypt, result) => {
-                if (errBcrypt) {
-                    return next(errBcrypt);
-                };
-                if (result) {
-                    const tokenObject = {
-                        id: user.id,
-                        email: user.email
-                    }
-                    const tokenOptions = {
-                        expiresIn: "15m"
-                    }
-                    let token = jwt.sign(tokenObject, process.env.JWT_KEY, tokenOptions)
-                    response.status(Status.OK).send({id: user.id, email: user.email,
-                        token: token})
-                } else {
-                    response.status(Status.UNAUTHORIZED).send();
-                }
-
-            });
+    const data = {
+        email: request.body.email,
+        pwd: request.body.pwd
+    }
+    try {
+        const result = await service.login(data);
+        if (result == 'UNAUTHORIZED') {
+            response.status(Status.UNAUTHORIZED).send();
         } else {
-            response.status(Status.UNAUTHORIZED).send()
+            response.status(Status.OK).send(result)
         }
-    }).catch((error) => next(error))
-
-};
+    } catch (error) {
+        next(error);
+    }
+}
