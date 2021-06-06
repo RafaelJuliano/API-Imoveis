@@ -4,7 +4,6 @@ const status = require('http-status');
 const propertyRoute = require('./routes/properties');
 const userRoute = require('./routes/users');
 const sequelize = require('./database/database');
-const { Console } = require('console');
 
 const app = express();
 
