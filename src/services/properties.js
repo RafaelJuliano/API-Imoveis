@@ -2,12 +2,8 @@ const Property = require('../models/properties');
 const Status = require('http-status');
 
 exports.getProperty = async (id) => {
-    try {
-        const property = await Property.findByPk(id);
-        return property;
-    } catch (error) {
-        next(error)
-    }
+    const property = await Property.findByPk(id);
+    return property;
 }
 
 exports.getProperties = async (setLimit, setPage) => {
@@ -17,34 +13,33 @@ exports.getProperties = async (setLimit, setPage) => {
     limit = limit > ITENS_PER_PAGE || limit <= 0 ? ITENS_PER_PAGE : limit;
     page = page <= 0 ? 0 : page * limit;
 
-    try {
-        const properties = await Property.findAll({ limit: limit, offset: page });
+    const properties = await Property.findAll({ limit: limit, offset: page });
     return properties;
-    } catch (error) {
-        next(error);
-    }   
 };
 
 exports.registerNewProperty = async (property) => {
-    try {
-       const newProperty = await Property.create({
-            cep: property.cep,
-            number: property.number,
-            complement: property.complement,
-            price: property.price,
-            rooms: property.rooms
-        });
-        return newProperty;
-    } catch (error) {
-        next(error)
-    }
-    Property.create({
+    const newProperty = await Property.create({
         cep: property.cep,
         number: property.number,
         complement: property.complement,
         price: property.price,
         rooms: property.rooms
-    }).then((result) => {
-        response.status(Status.CREATED).send(result);
-    }).catch((error) => next(error));
+    });
+    return newProperty;
+}
+
+exports.updateProperty = async (property, next) => {
+    const propertyExist = await Property.findByPk(property.id);
+    if (propertyExist) {
+        const result = await Property.update({
+            number: property.number,
+            cep: property.cep,
+            complement: property.complement,
+            price: property.price,
+            rooms: property.rooms
+        }, { where: { id: property.id } });
+        return 'updated';
+    } else {
+        return 'not found';
+    }
 }

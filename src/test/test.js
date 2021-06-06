@@ -113,7 +113,6 @@ test('Should recieve bad request status', async function () {
     };     
     const endPoint = `${url}/imoveis/${property.id}`;
     const response = await request(endPoint, 'put', property);
-    const updatedProperty = await request(endPoint, 'get');
     expect(response.status).toBe(400);
 });
 
