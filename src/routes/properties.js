@@ -16,7 +16,7 @@ router.get('/imoveis', login.validate, controller.getProperties)
 
 router.post('/imoveis', login.validate, controller.registerNewProperty)
 
-router.put('/imoveis/:id', login.validate, controller.updateProperty)
+router.patch('/imoveis/:id', login.validate, controller.updateProperty)
 
 router.delete('/imoveis/:id', login.validate, controller.deleteProperty)
 

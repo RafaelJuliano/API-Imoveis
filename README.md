@@ -1,2 +1,437 @@
-# API-Imoveis
- Modelo de API Rest responsável por servir uma plataforma de gerenciamento de imóveis.
+# API RESTfull de gerenciamento de Imóveis
+
+ Modelo de API Rest responsável por servir uma plataforma de gerenciamento de imóveis.  
+ A aplicação conta com os seguintes métodos:  
+
+* Cadastro de usuário - Senhas criptografadas com **BCrypt.js**.
+* Login de usuário - Autenticação via **Json Web Token**.
+* Cadastro de imóvel.
+* Busca de um imóvel.
+* Busca de lista de imóveis com paginação.
+* Edição de um ou mais dados de um imóvel.
+* Exclusão de um imóvel.
+
+## Principais técnologias
+
+* **Node.js**
+* **Express**
+* **Sequelize**
+* **BCrypt.js**
+* **JWT**
+
+## Instalação 
+
+Após baixar os arquivos, será necessário crir um arquivo .env onde serão configuradas as variávies de ambiente.  
+Utilize o seguinte formato:  
+
+```
+JWT_KEY = "Chave de validação do Json Web Token"
+
+//Dados de conexão do banco de dados
+DB_HOST_REMOTE = 'URL do BD
+DB_PORT_REMOTE = Porta do BD
+DB_NAME_REMOTE = 'Nome do BD'
+DB_DIALECT_REMOTE = 'Liguagem SQL' (API testada somente com MySQL)
+DB_USER_REMOTE = 'Usuário de acesso'
+DB_PASSWORD_REMOTE = 'Senha de acesso'
+```
+
+Após a configuração das variáveis basta instalar as dependências com:
+
+```
+npm install
+```
+
+## Execução
+
+A aplicação utiliza **Dotenv** para carregar o arquivo .env com as variávies de ambiente.  
+Esta requisição é feita atráves da execução da api no terminal.  
+Para inicar a aplicação, basta ir ao diretório raiz e executar o seguinte comando:
+
+```
+node -r dotenv/config ./src/app.js
+```
+
+Ao iniciar, o Sequelize fará a consulta das tabelas de usuários e imóveis no banco. Caso não existam, irá criá-las automaticamente.
+Caso esteja em ambiente de desenvolvimento, é possível forçar a criação de novas tabelas vazias, toda vez que a API é iniciada. Basta alterar o parâmetro *force* para *true* no app.js
+
+```
+sequelize.sync({ force: true }).then(() => {
+    const port = process.env.PORT || 3000;
+
+    app.set('port', port);
+
+    const server = http.createServer(app);
+
+    server.listen(port, () => console.log('Server online on http://localhost:' + port));
+});
+```
+
+## Métodos
+
+### Cadastro de usuário
+
+| Método   |           Rota             |
+| -------- |:--------------------------:|
+| POST     | /api/usuarios/cadastro     |  
+
+##### Requisição
+
+```
+body:
+{
+    "name": "Nome completo do usuário",
+    "cpf": "000.111.222-00",
+    "email": "email@dominio.com",
+    "pwd": "senha"
+}
+```
+
+##### Resposta
+
+###### Status Code 201
+
+```
+{
+    "id": 1
+}
+```
+
+---
+
+### Login de usuário
+
+| Método   |           Rota             |
+| -------- |:--------------------------:|
+| POST     | /api/usuarios/login        |  
+
+##### Requisição
+
+```
+body:
+{
+    "email": "email@dominio.com",
+    "pwd": "senha"
+}
+```
+
+##### Resposta
+
+###### Status Code 200
+
+```
+{
+    "id": 1,
+    "email": "email@dominio.com",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJyYWZhZWxmZXJyZWlyYUBob3RtYWlsLmNvbSIsImlhdCI6MTYyMzAxMTI2NSwiZXhwIjoxNjIzMDEyMTY1fQ.BEfNCd7g4QYNBrQOzAeRuuT35qXUZjReD3y55bZbG0E"
+}
+```
+
+---
+
+### Cadastrar imóvel
+
+| Método   |           Rota             |
+| -------- |:--------------------------:|
+| POST     | /api/imoveis               |  
+
+##### Requisição
+
+```
+header:
+{
+    Authorization: Bearer {token}
+}
+body:
+{
+    "cep": "12345-123",
+    "number": 100,
+    "complement": "complemento",
+    "price": 150000,
+    "rooms": 2,
+    "available": true
+}
+```
+
+##### Resposta
+
+###### Status Code 201
+
+```
+{
+    "available": true,
+    "id": 1,
+    "cep": "12345-123",
+    "number": 100,
+    "complement": "complemento",
+    "price": 150000,
+    "rooms": 2,
+    "updatedAt": "2021-06-07T16:21:41.369Z",
+    "createdAt": "2021-06-07T16:21:41.369Z"
+}
+```
+
+---
+
+### Buscar imóvel
+
+| Método   |           Rota             |
+| -------- |:--------------------------:|
+| GET      | /api/imoveis/:id           |  
+
+##### Requisição
+
+```
+header:
+{
+    Authorization: Bearer {token}
+}
+```
+
+##### Resposta
+
+###### Status Code 200
+
+```
+{
+    "available": true,
+    "id": 1,
+    "cep": "12345-123",
+    "number": 100,
+    "complement": "complemento",
+    "price": 150000,
+    "rooms": 2,
+    "updatedAt": "2021-06-07T16:21:41.369Z",
+    "createdAt": "2021-06-07T16:21:41.369Z"
+}
+```
+
+---
+
+### Buscar imóveis
+
+Neste método, por questões de performace, o resultado é dividido em páginas, sendo necessário passar o limite de itens por página, e qual intervalo buscar.
+
+| Método   |           Rota             |
+| -------- |:--------------------------:|
+| GET      | /api/imoveis/?page=""&limit=""           |  
+
+##### Requisição
+
+###### Exemplo com rota api/imoveis/?page=1&limit=5
+
+```
+header:
+{
+    Authorization: Bearer {token}
+}
+```
+
+##### Resposta:
+
+###### Status Code 200
+
+```
+[
+    {
+        "id": 6,
+        "cep": "12345-123",
+        "number": 100,
+        "complement": "complemento",
+        "price": "150000.00",
+        "rooms": 2,
+        "available": true,
+        "createdAt": "2021-06-07T16:22:32.000Z",
+        "updatedAt": "2021-06-07T16:22:32.000Z"
+    },
+    {
+        "id": 7,
+        "cep": "12345-123",
+        "number": 100,
+        "complement": "complemento",
+        "price": "150000.00",
+        "rooms": 2,
+        "available": true,
+        "createdAt": "2021-06-07T16:22:33.000Z",
+        "updatedAt": "2021-06-07T16:22:33.000Z"
+    },
+    {
+        "id": 8,
+        "cep": "12345-123",
+        "number": 100,
+        "complement": "complemento",
+        "price": "150000.00",
+        "rooms": 2,
+        "available": true,
+        "createdAt": "2021-06-07T16:22:33.000Z",
+        "updatedAt": "2021-06-07T16:22:33.000Z"
+    },
+    {
+        "id": 9,
+        "cep": "12345-123",
+        "number": 100,
+        "complement": "complemento",
+        "price": "150000.00",
+        "rooms": 2,
+        "available": true,
+        "createdAt": "2021-06-07T16:22:34.000Z",
+        "updatedAt": "2021-06-07T16:22:34.000Z"
+    },
+    {
+        "id": 10,
+        "cep": "12345-123",
+        "number": 100,
+        "complement": "complemento",
+        "price": "150000.00",
+        "rooms": 2,
+        "available": true,
+        "createdAt": "2021-06-07T16:22:34.000Z",
+        "updatedAt": "2021-06-07T16:22:34.000Z"
+    }
+]
+
+```
+
+---
+
+### Editar imóvel
+
+Neste método é possível atualizar, um ou mais dados do imóvel.
+
+| Método   |           Rota             |
+| -------- |:--------------------------:|
+| PATCH      | /api/imoveis/:id         |  
+
+##### Requisição:
+
+```
+header:
+{
+    Authorization: Bearer {token}
+}
+body:
+{
+    "cep": "678901-321",
+    "available": false
+}
+
+```
+
+##### Resposta
+
+###### Status Code 200
+
+### Editar imóvel
+
+Neste método é possível atualizar, um ou mais dados do imóvel.
+
+| Método   |           Rota             |
+| -------- |:--------------------------:|
+| PATCH      | /api/imoveis/:id         |  
+
+##### Requisição
+
+```
+header:
+{
+    Authorization: Bearer {token}
+}
+body:
+{
+    "cep": "678901-321",
+    "available": false
+}
+
+```
+
+##### Resposta
+
+###### Status Code 200
+
+---
+
+### Deletar imóvel
+
+| Método   |           Rota             |
+| -------- |:--------------------------:|
+| DELETE   | /api/imoveis/:id           |  
+
+##### Requisição
+
+```
+header:
+{
+    Authorization: Bearer {token}
+}
+
+```
+
+##### Resposta:
+
+###### Status Code 200
+
+## Principais camadas da aplicação
+
+As requisições possuem três etapas, cada uma com sendo executada em camadas distintas.
+A execução poressegue nesta ordem: Route -> Controller -> Service.
+
+### Route
+
+É Responsável por identificar os métodos e rotas da requisição, e então direcionar ao controller. Também fica responsável por chamar o middleware de validação do token.
+
+Exemplo de rota de cadastro de imóveis:
+
+```
+router.post('/imoveis', login.validate, controller.registerNewProperty);
+```
+
+### Controller
+
+A principal função da camada controller é receber as requisições e enviar as respostas. Ela apenas organiza as informações do corpo da requisição e envia para camada service. Então responde conforme o retorno.
+
+Exemplo de controller do cadastro de imóveis:
+```
+exports.registerNewProperty = async (request, response, next) => {
+    try {
+        const property = {
+            cep: request.body.cep,
+            number: request.body.number,
+            complement: request.body.complement,
+            price: request.body.price,
+            rooms: request.body.rooms
+        };
+
+        const newProperty = await service.registerNewProperty(property);
+        response.status(Status.CREATED).send(newProperty);
+    } catch (error) {
+        next(error);
+    }
+}
+```
+
+### Service
+
+Aqui que acontece de fato a regra de negócio. É na camada service que toda a lógica acontece e onde são chamadas as funções de conexão do banco de dados.
+
+Exemplo do service de login de usuário:
+```
+exports.login = async (data) => {
+    const user = await findUser(data.email);
+    if (user) {
+        const isPwdValid = await security.comparePassword(data.pwd, user.pwd);
+        if (isPwdValid) {
+            const token = security.generateToken(user);
+            return {
+                id: user.id, email: user.email,
+                token: token
+            };
+        } else {
+            return 'UNAUTHORIZED';
+        }
+    } else {
+        return 'UNAUTHORIZED';
+    }
+}
+```
+
+

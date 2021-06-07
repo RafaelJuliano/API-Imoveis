@@ -100,7 +100,7 @@ test('Should update one intem in a property', async function () {
         cep: '80150-000'    
     };     
     const endPoint = `${url}/imoveis/${property.id}`;
-    const response = await request(endPoint, 'put', property);
+    const response = await request(endPoint, 'patch', property);
     const updatedProperty = await request(endPoint, 'get');
     expect(response.status).toBe(200);
     expect(updatedProperty.data.cep).toBe(property.cep);   
@@ -112,7 +112,7 @@ test('Should recieve bad request status', async function () {
         cep: '80150-0000'    
     };     
     const endPoint = `${url}/imoveis/${property.id}`;
-    const response = await request(endPoint, 'put', property);
+    const response = await request(endPoint, 'patch', property);
     expect(response.status).toBe(400);
 });
 
