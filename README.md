@@ -460,3 +460,8 @@ jest --env node
 
 ```
 
+### Contato
+Para mais informações entre em contato:
+
+* Email: rafael.j.ferreira@hotmail.com
+* LinkedIn: <https://www.linkedin.com/in/rafael-juliano-ferreira-991084169>
