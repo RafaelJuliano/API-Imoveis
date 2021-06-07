@@ -433,5 +433,30 @@ exports.login = async (data) => {
     }
 }
 ```
+## Testes automatizados
 
+A aplicação possui uma rotina de teste que utiliza **Jest** para execução.
+Ela conta com onze etapas que testam todas os métodos e o tratamento de alguns possíveis erros.
+
+São eles:
+
+|Teste|Retorno|
+|--|--|
+|Should create a user|Deve retornar o Id do usuário cadastrado|
+|Should not duplicated email|Deve retornar Status 409 por e-mail duplicado|
+|Should not validate cpf|Deve retornar Status 400 por formato de CPD inválido|
+|Should login|Deve retornar Status 200. Também registra o token para os próximos testes|
+|Should not login|Deve retornar Status 401 por senha inválida|
+|Should save a property|Deve retornar Status 201|
+|Should get a property|Deve retornar Status 200|
+|Should update one item in a property|Deve retornar Status 200 e o campo CEP deve ser igual ao requisitado|
+|Should recieve bad request status|Deve retonar Status 400 por formato inválido no CEP|
+|Should delete a property|Deve retornar Status 200|
+|Should save, get and delete many properties|Deve retornar todos os três imóveis cadastrados e então apaga-los|
+
+Para executar os testes, as tabelas precisam estar vazias. Então entre na pasta test execute o comando:
+```
+jest --env node
+
+```
 

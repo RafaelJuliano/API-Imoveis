@@ -94,7 +94,7 @@ test('Should get a property', async function () {
     expect(response.status).toBe(200);   
 });
 
-test('Should update one intem in a property', async function () {
+test('Should update one item in a property', async function () {
     const property = {
         id : 1,
         cep: '80150-000'    

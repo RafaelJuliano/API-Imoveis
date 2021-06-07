@@ -29,7 +29,7 @@ app.use((error, request, response, next) => {
     response.status(status.INTERNAL_SERVER_ERROR).json({ message: error.message })
 });
 
-
+//force true para limpar o banco toda vez que iniciar a aplicação.
 sequelize.sync({ force: true }).then(() => {
     const port = process.env.PORT || 3000;
 

@@ -29,6 +29,13 @@ exports.registerNewUser = async (request, response, next) => {
     }
 };
 
+
+/*
+Solicita o login do usuário e retorna um token de autenticação.
+@paran email = String com e-mail valido.
+@paran pwd = String com senha.
+@return = Id, email e token.
+*/
 exports.login = async (request, response, next) => {
     const data = {
         email: request.body.email,
