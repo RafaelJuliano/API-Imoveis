@@ -6,14 +6,13 @@ USER CONTROLLER LAYER
 É responsável por tratar os dados das requisições, envia-los à cadama de serviço e responder ao cliente conforme o resultado retornado.
 */
 
-/*
-Solicita o cadastro de um novo usuário
-@paran name = String com nome do usuário.
-@paran cpd = String com o CPF no formato 000.000.000-00.
-@paran email = String com e-mail valido.
-@paran pwd = String com senha.
-@return = ID do usuário criado.
-*/
+
+/**
+ * Recolhe dados da requisição e solicita o cadastro de um novo usuário para a camada service
+ * @param {Json} request - {name: String com nome do usuário, cpf: String com o CPF no formato 000.000.000-00, email: String com e-mail valido, pwd: String com senha.}
+ * @param {Json} response - {id: createdUserId}
+ * @param {*} next - Recolhe os erros.
+ */
 exports.registerNewUser = async (request, response, next) => {
     try {
         const newUser = {
@@ -29,13 +28,12 @@ exports.registerNewUser = async (request, response, next) => {
     }
 };
 
-
-/*
-Solicita o login do usuário e retorna um token de autenticação.
-@paran email = String com e-mail valido.
-@paran pwd = String com senha.
-@return = Id, email e token.
-*/
+/**
+ * Solicita o login do usuário  para camada service e retorna um token de autenticação.
+ * @param {Json} request - {email: String com e-mail valido,  pwd: String com senha}
+ * @param {Json} response - {id: UserID, email: userEmail, token: token}
+ * @param {*} next - Recolhe os erros.
+ */
 exports.login = async (request, response, next) => {
     const data = {
         email: request.body.email,

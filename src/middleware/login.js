@@ -4,8 +4,15 @@ const service = require('../services/security');
 
 /*
 JWT MIDDLEWARE
-Realiza validação de tokens.
 */
+
+/**
+ * Realiza a validaçao do token enviado no cabeçalho da requisição.
+ * @param {String} request - Header {Authorization: Bearer {token}}
+ * @param {Json} response - {id: UserID, email: userEmail, token: token}
+ * @param {*} next 
+ * @returns 
+ */
 exports.validate = (request, response, next) => {
     try {
         const token = request.headers.authorization.split(' ')[1];
@@ -14,7 +21,5 @@ exports.validate = (request, response, next) => {
         next();
     } catch (error) {
         return response.status(Status.UNAUTHORIZED).send({message:'token validation failed'});
-    }
-    
-
+    } 
 }
