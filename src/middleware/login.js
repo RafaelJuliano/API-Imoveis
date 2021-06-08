@@ -6,12 +6,14 @@ const service = require('../services/security');
 JWT MIDDLEWARE
 */
 
+/** @module MIDDLEWARE JWT */
+
 /**
  * Realiza a validaçao do token enviado no cabeçalho da requisição.
  * @param {*} request - Header {Authorization: Bearer {token}}
  * @param {Json} response 
  * @param {*} next - Recolhe erros.
- * @returns - {id: UserID, email: userEmail, token: token}
+ * @returns {Object} - {id: UserID, email: userEmail, token: token}
  */
 exports.validate = (request, response, next) => {
     try {
