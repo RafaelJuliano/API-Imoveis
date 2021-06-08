@@ -9,9 +9,9 @@ JWT MIDDLEWARE
 /**
  * Realiza a validaçao do token enviado no cabeçalho da requisição.
  * @param {*} request - Header {Authorization: Bearer {token}}
- * @param {Json} response - {id: UserID, email: userEmail, token: token}
- * @param {*} next 
- * @returns 
+ * @param {Json} response 
+ * @param {*} next - Recolhe erros.
+ * @returns - {id: UserID, email: userEmail, token: token}
  */
 exports.validate = (request, response, next) => {
     try {

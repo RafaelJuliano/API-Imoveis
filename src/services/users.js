@@ -6,11 +6,11 @@ USER SERVICE LAYER
 Responsável por executar a regra de negócio e invocar o objeto Sequelize para operações no banco de dados.
 */
 
-
-/*
-Realiza criptografia da senha com BCrypt e então realiza o cadastro no banco de dados.
-@paran newUSer = Objeto com dados do usuário.
-*/
+/**
+ * Realiza criptografia da senha com BCrypt e então realiza o cadastro no banco de dados.
+ * @param {User} newUser - Objeto com dados do usuário.
+ * @returns - User ID
+ */
 exports.registerNewUser = async (newUser) => {
     const hash = await security.hashPassword(newUser.pwd);
     console.log(hash);
@@ -25,11 +25,11 @@ exports.registerNewUser = async (newUser) => {
 }
 
 
-/*
-Verifica a existencia do cadastro e então valida a senha.
-@paran data = Objeto com email e senha do usuário.
-@return = Id, email e token.
-*/
+/**
+ * Verifica a existencia do cadastro e então valida a senha.
+ * @param {Json} data - {email: {String}, pwd: {String}}
+ * @returns - {id: user.id, email: user.email, token: token}
+ */
 exports.login = async (data) => {
     const user = await findUser(data.email);
     if (user) {
@@ -48,9 +48,12 @@ exports.login = async (data) => {
     }
 }
 
-/*
-Realiza busca de usuário por email. 
-*/
+
+/**
+ * Realiza busca de usuário por email.
+ * @param {String} - Email do usuário.
+ * @returns - {User}.
+ */
 findUser = async (email) => {
     const user = await User.findOne({ where: { email: email } });
     return user;
