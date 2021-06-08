@@ -6,10 +6,12 @@ PROPERTY CONTROLLER LAYER
 É responsável por tratar os dados das requisições, envia-los à cadama de serviço e responder ao cliente conforme o resultado retornado.
 */
 
-/*
-Solicita um imóvel específico conforme o id passado com parâmetro na URL.
-@paran id = Id do imóvel a ser requisitado via url.
-*/
+/**
+ * Solicita um imóvel específico conforme o id passado com parâmetro na URL.
+ * @param {*} request - Id do imóvel a ser requisitado via url.
+ * @param {Object} response - Imóvel encontrado.
+ * @param {*} next - Recolhe os erros.
+ */
 exports.getProperty = async (request, response, next) => {
     const id = request.params.id;
 
@@ -25,12 +27,12 @@ exports.getProperty = async (request, response, next) => {
     }
 };
 
-
-/*
-Solicita todos os imóveis cadastrados. Os resultados são paginados para melhor performace.
-@paran limit = Limite de intens por página com valor máximo de 15. (Padrão 20).
-@paran page = Intervalor de resultados a ser requisitado. (Padrão 0)
-*/
+/**
+ * Solicita todos os imóveis cadastrados. Os resultados são paginados para melhor performace.
+ * @param {*} request - limit: Limite de intens por página com valor máximo de 15. (Padrão 20), page: Intervalo de resultados a ser requisitado. (Padrão 0)
+ * @param {Object[]} response - Intervalo de resultados a ser requisitado. (Padrão 0)
+ * @param {*} next - Recolhe os erros.
+ */
 exports.getProperties = async (request, response, next) => {
     const limit = parseInt(request.query.limit || 0);
     const page = parseInt(request.query.page || 0);
@@ -54,14 +56,12 @@ exports.getProperties = async (request, response, next) => {
 };
 
 
-/*
-Solicita a inclusão de um novo imóvel no banco de dados.
-@paran cep = Deve receber no formáto 00000-000.
-@paran number = Recebe inteiro com limite de 6 digitos.
-@paran complemente = (Opcional).
-@paran price = Recebe um decimal com limite de 10 digitos.
-@paran rooms = Recebe um inteiro com limit de 2 digitos.
-*/
+/**
+ * Solicita a inclusão de um novo imóvel no banco de dados.
+ * @param {*} request - {cep: Deve receber no formáto 00000-000,  number: Recebe inteiro com limite de 6 digitos, complement: (Opcional), price: Recebe um decimal com limite de 10 digitos, rooms: Recebe um inteiro com limit de 2 digitos, available: booleano (Opcional)}
+ * @param {Property} response - Imóvel cadastrado.
+ * @param {*} next - Recolhe os erros.
+ */
 exports.registerNewProperty = async (request, response, next) => {
     try {
         const property = {
@@ -79,16 +79,12 @@ exports.registerNewProperty = async (request, response, next) => {
     }
 }
 
-
-/*
-Solicita a alteração de uma ou mais colunas de um imóvel.
-@paran id = Id do imóvel a ser requisitado via url.
-@paran cep = Deve receber no formáto 00000-000.
-@paran number = Recebe inteiro com limite de 6 digitos.
-@paran complemento = (Opcional).
-@paran price = Recebe um decimal com limite de 10 digitos.
-@paran rooms = Recebe um inteiro com limit de 2 digitos.
-*/
+/**
+ * Solicita a alteração de uma ou mais colunas de um imóvel.
+ * @param {*} request - {cep: Deve receber no formáto 00000-000,  number: Recebe inteiro com limite de 6 digitos, complement: , price: Recebe um decimal com limite de 10 digitos, rooms: Recebe um inteiro com limit de 2 digitos, available: booleano)}
+ * @param {*} response - Status OK
+ * @param {*} next - Recolhe os erros.
+ */
 exports.updateProperty = async (request, response, next) => {
     try {
         const property = {
@@ -112,10 +108,12 @@ exports.updateProperty = async (request, response, next) => {
 }
 
 
-/*
-Solicita a exclusão de um imóvel.
-@paran id = Id do imóvel a ser requisitado via url.
-*/
+/**
+ * Solicita a exclusão de um imóvel.
+ * @param {*} request - Id do imóvel a ser requisitado via url.
+ * @param {*} response - Status OK
+ * @param {*} next - Recolhe os erros.
+ */
 exports.deleteProperty = async (request, response, next) => {
     const id = request.params.id
 

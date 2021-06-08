@@ -8,7 +8,7 @@ JWT MIDDLEWARE
 
 /**
  * Realiza a validaçao do token enviado no cabeçalho da requisição.
- * @param {String} request - Header {Authorization: Bearer {token}}
+ * @param {*} request - Header {Authorization: Bearer {token}}
  * @param {Json} response - {id: UserID, email: userEmail, token: token}
  * @param {*} next 
  * @returns 
