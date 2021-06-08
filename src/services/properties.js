@@ -5,23 +5,25 @@ PROPERTY SERVICE LAYER
 Responsável por executar a regra de negócio e invocar o objeto Sequelize para operações no banco de dados.
 */
 
-/*
-Retorna um imóvel pelo seu ID
-@paran id = Valor inteiro com id do imóvel.
-@return = Imóvel encontrado.
-*/
+
+/**
+ * Retorna um imóvel pelo seu ID
+ * @param {Number} id - ID do imóvel 
+ * @returns {Property} - Imóvel encontrado.
+ */
 exports.getProperty = async (id) => {
     const property = await Property.findByPk(id);
     return property;
 }
 
-/*
-Retorna a quantidade (limit) do intervalo (page) dos imóveis cadastrados ordenados pelo id;
-exemplo. (page = 2, limit = 10) Retorna intervalo entre 21 e 30.
-@paran limit = Tamanho do intervalo retornado.
-@paran page = Determina o intervalo retornado.
-@return = Array de objetos com imóveis.
-*/
+
+/**
+ * Retorna a quantidade (limit) do intervalo (page) dos imóveis cadastrados ordenados pelo id;
+ * exemplo. (page = 2, limit = 10) Retorna intervalo entre 21 e 30.
+ * @param {Number} setLimit - Tamanho do intervalo retornado.
+ * @param {Number} setPage - Determina o intervalo retornado.
+ * @returns {Proerty[]} - Array de objetos com imóveis.
+ */
 exports.getProperties = async (setLimit, setPage) => {
     let limit = setLimit;
     let page = setPage;
@@ -35,11 +37,12 @@ exports.getProperties = async (setLimit, setPage) => {
     return properties;
 };
 
-/*
-Cadastra um novo imóvel.
-@paran property = Objeto com dados do imóvel.
-@return = Objeto do imóvel cadastrado.
-*/
+
+/**
+ * Cadastra um novo imóvel.
+ * @param {Property} property - Objeto com dados do imóvel.
+ * @returns {Property} - Objeto do imóvel cadastrado.
+ */
 exports.registerNewProperty = async (property) => {
     const newProperty = await Property.create({
         cep: property.cep,
@@ -52,11 +55,11 @@ exports.registerNewProperty = async (property) => {
 }
 
 
-/*
-Atualiza um ou mais dados de um imóvel.
-@paran property = Objeto com dados a serem atualizados do imóvel. ID é obrigatório.
-@return = String com confirmação se o imóvel foi atualizado ou não encontrado.
-*/
+/**
+ * Atualiza um ou mais dados de um imóvel.
+ * @param {Property} property - Objeto com dados a serem atualizados do imóvel. ID é obrigatório.
+ * @returns {String} - updated || not found.
+ */
 exports.updateProperty = async (property) => {
     const propertyExist = await Property.findByPk(property.id);
     if (propertyExist) {
@@ -74,11 +77,11 @@ exports.updateProperty = async (property) => {
 }
 
 
-/*
-Deleta um imóvel.
-@paran id = Id do imóvel a ser deletado.
-@return = String com confirmação se o imóvel foi deletado ou não encontrado.
-*/
+/**
+ * Deleta um imóvel.
+ * @param {Number} id - Id do imóvel a ser deletado.
+ * @returns {String} - String com confirmação se o imóvel foi deletado ou não encontrado.
+ */
 exports.deleteProperty = async (id) => {
     const propertyExist = await Property.findByPk(id);
     if (propertyExist) {
