@@ -45,10 +45,9 @@ exports.getProperties = async (request, response, next) => {
     };
 
     try {
-        const propertiesFound = await service.getProperties(limit, page);
-
+        const {count, properties: propertiesFound} = await service.getProperties(limit, page);
         if (propertiesFound && propertiesFound.length) {
-            response.send(propertiesFound);
+            response.send({count, propertiesFound});
         } else {
             response.status(Status.NOT_FOUND).send();
         };

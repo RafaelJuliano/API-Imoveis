@@ -4,8 +4,17 @@ const status = require('http-status');
 const propertyRoute = require('./routes/properties');
 const userRoute = require('./routes/users');
 const sequelize = require('./database/database');
+var cors = require('cors')
+
+
 
 const app = express();
+var corsOptions = {
+	origin : 'http://localhost:4200',
+	optionsSuccessStatus: 200
+  }
+
+app.use(cors(corsOptions))
 
 app.use(express.json());
 

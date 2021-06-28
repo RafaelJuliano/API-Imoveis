@@ -34,8 +34,8 @@ exports.getProperties = async (setLimit, setPage) => {
     limit = limit > ITENS_PER_PAGE || limit <= 0 ? ITENS_PER_PAGE : limit;
     page = page <= 0 ? 0 : page * limit;
 
-    const properties = await Property.findAll({ limit: limit, offset: page });
-    return properties;
+    const {count, rows: properties} = await Property.findAndCountAll({ limit: limit, offset: page });    
+    return {count, properties};
 };
 
 

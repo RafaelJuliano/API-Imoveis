@@ -210,7 +210,7 @@ header:
 
 ### Buscar imóveis
 
-Neste método, por questões de performace, o resultado é dividido em páginas, sendo necessário passar o limite de itens por página, e qual intervalo buscar.
+Neste método, por questões de performace, o resultado é dividido em páginas, sendo necessário passar o limite de itens por página, e qual intervalo buscar. Também retorna o número total de registros.
 
 | Método   |           Rota             |
 | -------- |:--------------------------:|
@@ -232,7 +232,8 @@ header:
 ###### Status Code 200
 
 ```
-[
+"count": 20,
+    "propertiesFound": [
     {
         "id": 6,
         "cep": "12345-123",
