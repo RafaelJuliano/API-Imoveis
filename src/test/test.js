@@ -138,7 +138,7 @@ test('Should save, get and delete many properties', async function () {
     await request(endPoint, 'post', property);
     await request(endPoint, 'post', property);
     const response = await request(endPoint, 'get');
-    expect(response.data).toHaveLength(3);
+    expect(response.data.propertiesFound).toHaveLength(3);
     expect(response.status).toBe(200);
     for (let id = 2; id <= 4; id++){
         await request(`${url}/imoveis/${id}`, 'delete');
