@@ -19,6 +19,10 @@ app.use(cors(corsOptions))
 app.use(express.json());
 
 //Rotas da API.
+app.use('/', (req, res)=>{
+    res.send("API works")
+})
+
 app.use('/api', propertyRoute);
 app.use('/api', userRoute);
 
