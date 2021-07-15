@@ -17,7 +17,7 @@ const Property = sequelize.define('Properties', {
 	},
 	number: {
 		allowNull: false,
-		type: Sequelize.INTEGER(6)	
+		type: Sequelize.INTEGER	
 	},
 	complement: {
       		type: Sequelize.STRING,
@@ -29,7 +29,7 @@ const Property = sequelize.define('Properties', {
     	},
 	rooms: {
 		allowNull: false,
-		type: Sequelize.INTEGER(2)
+		type: Sequelize.INTEGER
 	},
 	available: {	
 		type: Sequelize.BOOLEAN,
