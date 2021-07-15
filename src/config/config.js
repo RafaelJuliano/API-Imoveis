@@ -10,7 +10,7 @@ module.exports = {
 		}
 	},
 	
-	/*production: {
+	production: {
 		database: {
 			host: process.env.DB_HOST_REMOTE,
 			port: process.env.DB_PORT_REMOTE,
@@ -19,5 +19,5 @@ module.exports = {
 			user: process.env.DB_USER_REMOTE,
 			password: process.env.DB_PASSWORD_REMOTE
 		}
-	}*/
+	}
 };

@@ -1,9 +1,9 @@
 const Sequelize = require("sequelize");
 
-const environment = process.env.NODE_ENV //|| "development";
+const environment = process.env.NODE_ENV || "development";
 
 const config = require("../config/config.js")[environment];
-
+console.log(process.env.NODE_ENV);
 //Instância do obejto sequelize utilizado nos models.
 const sequelize = new Sequelize(
     config.database.name,
